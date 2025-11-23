@@ -1,0 +1,52 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('properties', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->text('description');
+            $table->string('city');
+            $table->string('country');
+            $table->string('postal_code')->nullable();
+            $table->string('address');
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('price_per_night', 10, 2);
+            $table->integer('bedrooms');
+            $table->integer('bathrooms');
+            $table->integer('guests');
+            $table->text('amenities')->nullable();
+            $table->enum('property_type', ['apartment', 'house', 'villa', 'studio', 'cottage', 'room'])->default('house');
+            $table->string('image_url')->nullable();
+            $table->text('images')->nullable();
+            $table->float('rating')->default(0);
+            $table->integer('reviews_count')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+
+            $table->index('city');
+            $table->index('country');
+            $table->index('user_id');
+            $table->index('is_active');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('properties');
+    }
+};
